@@ -1,16 +1,16 @@
-import "/node_modules/react-grid-layout/css/styles.css";
-import "/node_modules/react-resizable/css/styles.css";
+import '/node_modules/react-grid-layout/css/styles.css';
+import '/node_modules/react-resizable/css/styles.css';
 
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { API_URL, MS_API_URL } from "@/api";
-import Widget from "@/components/widgets";
-import useRoom from "@/hooks/useRoom";
-import { clickToCopy } from "@/lib/utils";
-import { Badge } from "@tremor/react";
+import { API_URL, MS_API_URL } from '@/api';
+import Widget from '@/components/widgets';
+import useRoom from '@/hooks/useRoom';
+import { clickToCopy } from '@/lib/utils';
+import { Badge } from '@tremor/react';
 
-import { socket } from "../socket";
+import { socket } from '../socket';
 
 type ChartTypes = "LINECHART" | "BARCHART" | "AREACHART";
 

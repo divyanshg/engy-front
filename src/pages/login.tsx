@@ -4,11 +4,12 @@ import { Button } from '../components/ui/button';
 import useLogin from '../hooks/useLogin';
 
 function Login() {
-  const { mutate: login, isPending, isError } = useLogin();
+  const { mutate: login, isPending } = useLogin();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleFormSubmit = (e: any) => {
     e.preventDefault();
     login({ email, password });

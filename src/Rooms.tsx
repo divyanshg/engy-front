@@ -1,14 +1,13 @@
-import toast from 'react-hot-toast';
+import { useEffect } from 'react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useQuery } from '@tanstack/react-query';
 
-import api from './api';
 import { NewRoom } from './components/NewRoom';
 import RoomCard from './components/RoomCard';
 import Skeleton from './components/Skeleton';
 import { useAuth } from './hooks/useAuth';
+import useGetRooms from './hooks/useGetRooms';
 import { clickToCopy } from './lib/utils';
 
 function Rooms() {
@@ -16,21 +15,27 @@ function Rooms() {
   const {
     data: rooms_data,
     isLoading,
-    isError,
-  } = useQuery<{
-    code: number;
-    data: {
-      id: string;
-      name: string;
-      createdAt: string;
-    }[];
-  }>({
-    queryKey: ["rooms"],
-    queryFn: async () =>
-      await api.list({
-        entity: "rooms",
-      }),
-  });
+    fetchNextPage,
+    hasNextPage,
+    isFetching,
+  } = useGetRooms();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + document.documentElement.scrollTop !==
+          document.documentElement.offsetHeight ||
+        isFetching
+      )
+        return;
+      if (hasNextPage) fetchNextPage();
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [fetchNextPage, isFetching, hasNextPage]);
+
+  const rooms = rooms_data?.pages.map((page) => page.data).flat();
 
   return (
     <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] bg-gray-100/40 flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 dark:bg-gray-800/40">
@@ -59,12 +64,10 @@ function Rooms() {
         </span>
       </div>
       <div className="grid w-full max-w-6xl gap-6 mx-auto md:grid-cols-2 lg:grid-cols-3">
-        {!isLoading && rooms_data && rooms_data.data.length > 0 ? (
-          rooms_data.data.map(
-            (room: { name: string; id: string; createdAt: string }) => (
-              <RoomCard key={room.id} room={room} />
-            )
-          )
+        {!isLoading && rooms && rooms.length > 0 ? (
+          rooms.map((room: { name: string; id: string; createdAt: string }) => (
+            <RoomCard key={room.id} room={room} />
+          ))
         ) : (
           <div className="w-full h-32 text-gray-500 dark:text-gray-400">
             No rooms created
@@ -72,6 +75,20 @@ function Rooms() {
         )}
         {isLoading ? [1, 2, 3].map(Skeleton) : null}
       </div>
+      {hasNextPage && (
+        <div className="flex items-center justify-center">
+          {isFetching ? (
+            "Loading..."
+          ) : (
+            <button
+              className="px-2 py-1 rounded cursor-pointer active:bg-lime-200 hover:bg-lime-100"
+              onClick={() => fetchNextPage()}
+            >
+              Load More
+            </button>
+          )}
+        </div>
+      )}
     </main>
   );
 }

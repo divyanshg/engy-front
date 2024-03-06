@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import GridLayout from 'react-grid-layout';
 import { Link, useParams } from 'react-router-dom';
 
@@ -28,7 +28,7 @@ function Dashboard() {
   const { data: room } = useRoom(id!);
   const [_layout, setLayout] = useState<Layout[]>([]);
   const [isEditing, setIsEditing] = useState(false);
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  const [, setIsConnected] = useState(socket.connected);
 
 
   const [chartData, setChartData] = useState<

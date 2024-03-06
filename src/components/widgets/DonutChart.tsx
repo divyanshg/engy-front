@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { DonutChart as Dc } from '@tremor/react';
 

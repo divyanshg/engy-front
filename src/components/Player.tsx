@@ -1,12 +1,13 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import 'video.js/dist/video-js.css';
 import 'videojs-flash';
 
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import videojs from 'video.js';
 
-const VideoJs = ({ videoUrl }) => {
-  const videoNode = useRef(null);
-  let player = null;
+const VideoJs = ({ videoUrl }: { videoUrl: string }) => {
+  const videoNode = useRef<HTMLVideoElement | null>(null);
+  let player: typeof videojs | null = null;
 
   useEffect(() => {
     const videoJsOptions = {
@@ -25,9 +26,9 @@ const VideoJs = ({ videoUrl }) => {
     };
     // instantiate Video.js
     player = videojs(
-      videoNode.current,
+      videoNode.current!,
       videoJsOptions,
-      function onPlayerReady() {
+      function onPlayerReady(this: videojs.Player) {
         console.log("onPlayerReady", this);
       }
     );

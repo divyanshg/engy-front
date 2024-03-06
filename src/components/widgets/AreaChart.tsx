@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { AreaChart as Ac } from '@tremor/react';
 

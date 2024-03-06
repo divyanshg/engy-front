@@ -1,4 +1,3 @@
-import React from 'react';
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import AreaChart from './AreaChart';
@@ -6,8 +5,6 @@ import BarChart from './BarChart';
 import DonutChart from './DonutChart';
 import LineChart from './LineChart';
 import Video from './Video';
-
-type WidgetTypes = "VIDEO" | "LINECHART";
 
 export type WidgetConfig = {
   id: string;
