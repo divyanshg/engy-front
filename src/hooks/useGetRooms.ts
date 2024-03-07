@@ -31,7 +31,7 @@ export default function useGetRooms() {
         entity: "rooms",
         options: {
           page: pageParam,
-          limit: 10,
+          limit: 12,
         },
       }),
     initialPageParam: 1,

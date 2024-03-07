@@ -35,8 +35,8 @@ function Protected() {
     return (
       <div className="flex flex-col items-center justify-center w-full h-screen space-y-4">
         <img
-          className="w-[200px] h-[60px] mr-2"
-          src="https://mru.edu.in/wp-content/uploads/2022/09/newmrlogo-scaled.jpg"
+          className="w-[200px] h-[60px] mr-2 rounded-xl border border-gray-100 mb-4 py-1 bg-white px-2"
+          src="https://manavrachna.edu.in/wp-content/uploads/2022/09/newmrlogo-scaled.jpg"
           alt="logo"
         />
         <svg

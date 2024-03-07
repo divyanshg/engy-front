@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useState } from "react";
 
-import { Button } from '../components/ui/button';
-import useLogin from '../hooks/useLogin';
+import { Button } from "../components/ui/button";
+import useLogin from "../hooks/useLogin";
 
 function Login() {
   const { mutate: login, isPending } = useLogin();
@@ -23,8 +23,8 @@ function Login() {
           className="flex flex-col items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
         >
           <img
-            className="w-[200px] h-[60px] mr-2"
-            src="https://mru.edu.in/wp-content/uploads/2022/09/newmrlogo-scaled.jpg"
+            className="w-[200px] h-[60px] mr-2 rounded-xl border border-gray-100 mb-4 py-1 bg-white px-2"
+            src="https://manavrachna.edu.in/wp-content/uploads/2022/09/newmrlogo-scaled.jpg"
             alt="logo"
           />
           MR Rooms

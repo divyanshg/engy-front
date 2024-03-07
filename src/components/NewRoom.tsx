@@ -1,15 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
-import { Button } from '@/components/ui/button';
+import { Button } from "@/components/ui/button";
 import {
-    Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle,
-    DialogTrigger
-} from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useMutation } from '@tanstack/react-query';
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
-import api from '../api';
+import useNewRoom from "../hooks/useNewRoom";
+import useNewRooms from "../hooks/useNewRooms";
 
 function getNamesMap(name: string) {
   return name
@@ -26,32 +33,9 @@ export function NewRoom() {
   const [seperateRooms, setSeperateRooms] = useState<any>([]);
   const [createMany, setCreateMany] = useState(false);
 
-  const { mutate: createRoom, isPending } = useMutation({
-    mutationKey: ["rooms"],
-    mutationFn: async (jsonData: Record<string, string>) =>
-      await api.create({ entity: "rooms", jsonData }),
-    // onSuccess: () => {
-    //   setTimeout(() => {
-    //     window.location.reload();
-    //   }, 1500);
-    // },
-  });
+  const { mutate: createRoom, isPending } = useNewRoom();
 
-  const { mutate: createRooms, isPending: isManyPending } = useMutation({
-    mutationKey: ["rooms"],
-    mutationFn: async (jsonData: ({ name: string } | undefined)[]) =>
-      await api.post({
-        entity: "rooms/create-many",
-        data: {
-          rooms: jsonData,
-        },
-      }),
-    onSuccess: () => {
-      setTimeout(() => {
-        window.location.reload();
-      }, 1500);
-    },
-  });
+  const { mutate: createRooms, isPending: isManyPending } = useNewRooms();
 
   useEffect(() => {
     //if name has , then create many rooms
@@ -64,6 +48,39 @@ export function NewRoom() {
       setCreateMany(false);
     }
   }, [name]);
+
+  function handleCreate() {
+    toast.promise(
+      createRoom({ name }) as never,
+      {
+        loading: "Creating room...",
+        success: "Room created successfully",
+        error: "Failed to create room",
+      },
+      {
+        style: {
+          minWidth: "250px",
+        },
+      }
+    );
+  }
+
+  function handleMultiCreate() {
+    const roomsMap = getNamesMap(name);
+    toast.promise(
+      createRooms(roomsMap) as never,
+      {
+        loading: `Creating ${roomsMap.length} rooms...`,
+        success: "Rooms created successfully",
+        error: "Failed to create rooms",
+      },
+      {
+        style: {
+          minWidth: "250px",
+        },
+      }
+    );
+  }
 
   return (
     <Dialog>
@@ -89,6 +106,11 @@ export function NewRoom() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
+            <div className="-mt-1">
+              <label htmlFor="name" className="text-sm text-gray-400">
+                Use comma (,) to create many rooms at once.
+              </label>
+            </div>
             <div className="flex flex-row space-x-2">
               {createMany &&
                 seperateRooms.length > 0 &&
@@ -103,20 +125,16 @@ export function NewRoom() {
         <DialogFooter>
           <DialogClose asChild>
             {!createMany ? (
-              <Button
-                type="submit"
-                onClick={() => createRoom({ name })}
-                disabled={isPending}
-              >
-                Create
+              <Button type="submit" onClick={handleCreate} disabled={isPending}>
+                Create room
               </Button>
             ) : (
               <Button
                 type="submit"
-                onClick={() => createRooms(getNamesMap(name))}
+                onClick={handleMultiCreate}
                 disabled={isManyPending}
               >
-                Create Many
+                Create {seperateRooms.length} rooms
               </Button>
             )}
           </DialogClose>

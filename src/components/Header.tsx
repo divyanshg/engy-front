@@ -1,18 +1,22 @@
-import { Fragment } from 'react';
-import { Link } from 'react-router-dom';
+import { Fragment } from "react";
+import { Link } from "react-router-dom";
 
-import { Menu, Transition } from '@headlessui/react';
+import { Menu, Transition } from "@headlessui/react";
 
-import { useAuth } from '../hooks/useAuth';
-import { Button } from './ui/button';
+import { useAuth } from "../hooks/useAuth";
+import { Button } from "./ui/button";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
   return (
     <header className="flex flex-row items-center justify-between h-16 px-4 border-b shrink-0 md:px-6">
-      <nav className="flex-row items-center hidden gap-5 text-sm font-medium sm:flex lg:gap-6">
+      <nav className="flex-row items-center hidden gap-5 text-sm font-medium divide-x divide-gray-200 sm:flex lg:gap-6">
         <Link className="font-bold" to="#">
-          MR Rooms
+          <img
+            className="w-[220px] h-[60px] mr-2 rounded-xl py-1 bg-white px-2"
+            src="https://manavrachna.edu.in/wp-content/uploads/2022/09/newmrlogo-scaled.jpg"
+            alt="logo"
+          />
         </Link>
       </nav>
       {isAuthenticated && user ? (
